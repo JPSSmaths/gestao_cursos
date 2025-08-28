@@ -13,12 +13,12 @@ public class CreateCursoUseCase {
     @Autowired
     private CursoRepository cursoRepository;
     
-    public void execute(CursoEntity cursoEntity){
+    public CursoEntity execute(CursoEntity cursoEntity){
         this.cursoRepository.findByName(cursoEntity.getName())
         .ifPresent(user -> {
-            throw new CursoFoundException();
+            throw new CursoFoundException("Usuário já existe");
         });
 
-        this.cursoRepository.save(cursoEntity);
+        return this.cursoRepository.save(cursoEntity);
     }
 }
