@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.modules.company.curso.CursoFoundException;
+import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
-import br.com.gestao_cursos.modules.curso.Entity.CursoEntity;
 
 @Service
 public class CreateCursoUseCase {
