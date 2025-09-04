@@ -12,8 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-@Entity
+@Entity(name = "company")
+@Data
 public class CompanyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.UUID)
