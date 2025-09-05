@@ -15,6 +15,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import br.com.gestao_cursos.exceptions.UserFoundException;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
+import br.com.gestao_cursos.modules.company.dto.AuthCompanyResponseDTO;
 
 @Service
 public class AuthCompanyUseCase {
@@ -27,7 +28,7 @@ public class AuthCompanyUseCase {
     @Autowired
     private CompanyRepository companyRepository;
     
-    public String auth(AuthCompanyRequestDTO authCompanyRequestDTO){
+    public AuthCompanyResponseDTO auth(AuthCompanyRequestDTO authCompanyRequestDTO){
         var company = this.companyRepository.findByUsernameOrEmail(authCompanyRequestDTO.getUsername(), null)
         .orElseThrow(() -> new UserFoundException("Usuário não cadastrado"));
 
@@ -35,17 +36,22 @@ public class AuthCompanyUseCase {
             throw new UserFoundException("Senha inválida");
         }
 
-        var expiresAt = Instant.now().plus(Duration.ofHours(2));
+        var expires_in = Instant.now().plus(Duration.ofHours(2));
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
-        String token = JWT.create()
+        var token = JWT.create()
             .withIssuer("cursos-programação")
             .withSubject(company.getId().toString())
             .withClaim("roles", Arrays.asList("ROLE_COMPANY"))
-            .withExpiresAt(expiresAt)
+            .withExpiresAt(expires_in)
             .sign(algorithm);
+
+        AuthCompanyResponseDTO authCompanyResponseDTO = AuthCompanyResponseDTO.builder()
+            .acess_token(token)
+            .expires_in(expires_in.toEpochMilli())
+            .build();
         
-            return token;
+        return authCompanyResponseDTO;
     }
-    
+
 }
