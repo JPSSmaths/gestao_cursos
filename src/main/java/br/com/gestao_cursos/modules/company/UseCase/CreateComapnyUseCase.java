@@ -1,6 +1,7 @@
 package br.com.gestao_cursos.modules.company.UseCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.exceptions.UserFoundException;
@@ -10,6 +11,9 @@ import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 @Service
 public class CreateComapnyUseCase {
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private CompanyRepository companyRepository;
 
     public CompanyEntity create(CompanyEntity companyEntity){
@@ -17,6 +21,9 @@ public class CreateComapnyUseCase {
             .ifPresent(user -> {
                 throw new UserFoundException("Usuário já existe");
             });
+
+        var passwordEncoded = this.passwordEncoder.encode(companyEntity.getPassword());
+        companyEntity.setPassword(passwordEncoded);
         
         this.companyRepository.save(companyEntity);
 

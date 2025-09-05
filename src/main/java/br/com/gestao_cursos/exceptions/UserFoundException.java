@@ -1,7 +1,7 @@
-package br.com.gestao_cursos.modules.company.curso;
+package br.com.gestao_cursos.exceptions;
 
-public class CursoFoundException extends RuntimeException{
-    public CursoFoundException(String usuario_found){
+public class UserFoundException extends RuntimeException{
+    public UserFoundException(String usuario_found){
         super();
     }
 }
