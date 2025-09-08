@@ -37,10 +37,10 @@ public class SecurityCompanyFilter extends OncePerRequestFilter{
                 }
 
                 request.setAttribute("company_id", token.getSubject());
-                var roles = token.getClaim("roles").asList(Object.class);
+                var roles = token.getClaim("roles").asList(String.class);
 
                 var grants = roles.stream()
-                    .map(role -> new SimpleGrantedAuthority(role.toString())).toList();
+                    .map(role -> new SimpleGrantedAuthority(role)).toList();
                 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(token, null, grants);
 
