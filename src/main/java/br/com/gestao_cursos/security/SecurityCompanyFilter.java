@@ -36,7 +36,7 @@ public class SecurityCompanyFilter extends OncePerRequestFilter{
                     return;
                 }
 
-                request.setAttribute("candidate_id", token.getSubject());
+                request.setAttribute("company_id", token.getSubject());
                 var roles = token.getClaim("roles").asList(Object.class);
 
                 var grants = roles.stream()
