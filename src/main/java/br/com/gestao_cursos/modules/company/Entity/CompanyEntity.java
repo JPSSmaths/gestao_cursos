@@ -31,6 +31,8 @@ public class CompanyEntity {
     @Email(message = "The fieled email cannot be null")
     private String email;
 
+    private String description;
+
     @CreationTimestamp
     private LocalDate created_at;
 
