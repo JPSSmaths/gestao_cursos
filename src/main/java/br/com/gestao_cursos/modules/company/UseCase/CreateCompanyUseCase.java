@@ -9,7 +9,7 @@ import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 
 @Service
-public class CreateComapnyUseCase {
+public class CreateCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -25,8 +25,6 @@ public class CreateComapnyUseCase {
         var passwordEncoded = this.passwordEncoder.encode(companyEntity.getPassword());
         companyEntity.setPassword(passwordEncoded);
         
-        this.companyRepository.save(companyEntity);
-
-        return companyEntity;
+        return this.companyRepository.save(companyEntity);
     }
 }

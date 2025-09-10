@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
-import br.com.gestao_cursos.modules.company.UseCase.CreateComapnyUseCase;
+import br.com.gestao_cursos.modules.company.UseCase.CreateCompanyUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.GetCompanyUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -21,18 +21,19 @@ import jakarta.validation.Valid;
 public class CompanyController {
 
     @Autowired
-    private CreateComapnyUseCase createComapnyUseCase;
+    private CreateCompanyUseCase createComapnyUseCase;
 
     @Autowired
     private GetCompanyUseCase getCompanyUseCase;
     
     @PostMapping("/create")
-    public ResponseEntity<Object> create(@RequestBody @Valid CompanyEntity companyEntity){
+    public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity){
         try {
             var result = this.createComapnyUseCase.create(companyEntity);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

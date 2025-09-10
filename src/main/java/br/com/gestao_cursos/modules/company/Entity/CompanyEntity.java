@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity(name = "company")
@@ -25,10 +25,10 @@ public class CompanyEntity {
     @Pattern(regexp = "\\S+", message = "The [username] field cannot contain blank spaces")
     private String username;
 
-    @Size(min = 5, max = 10, message = "The [password] field have to be between 5 and 10 characteres")
+    @Length(min = 5, max = 100, message = "The [password] field have to be between 5 and 10 characteres")
     private String password;
 
-    @Email(message = "The fieled email cannot be null")
+    @Email(message = "The fieled [email] have to be valid")
     private String email;
 
     private String description;
