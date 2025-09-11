@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("company/course")
 public class CursoController {
     @Autowired
     private CreateCursoUseCase createCursoUseCase;
