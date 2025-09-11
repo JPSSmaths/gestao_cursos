@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.UseCase.CreateCompanyUseCase;
-import br.com.gestao_cursos.modules.company.UseCase.GetCompanyUseCase;
 import jakarta.validation.Valid;
 
 @RestController
@@ -20,9 +19,6 @@ public class CompanyController {
     @Autowired
     private CreateCompanyUseCase createComapnyUseCase;
 
-    @Autowired
-    private GetCompanyUseCase getCompanyUseCase;
-    
     @PostMapping("/create")
     public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity){
         try {
