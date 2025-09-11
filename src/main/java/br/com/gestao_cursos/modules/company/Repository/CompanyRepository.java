@@ -9,4 +9,5 @@ import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 
 public interface CompanyRepository extends JpaRepository<CompanyEntity, UUID>{
     Optional<CompanyEntity> findByUsernameOrEmail(String username, String email);
+    Optional<CompanyEntity> findById(UUID id);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.UseCase.CreateCursoUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -19,9 +20,9 @@ public class CursoController {
     private CreateCursoUseCase createCursoUseCase;
 
     @PreAuthorize("hasRole(ROLE_COMPANY)")
-    public ResponseEntity<Object> create(@Valid @RequestBody CursoEntity cursoEntity){
+    public ResponseEntity<Object> create(@Valid @RequestBody CursoEntity cursoEntity, HttpServletRequest request){
         try {
-            var result = this.createCursoUseCase.execute(cursoEntity);
+            var result = this.createCursoUseCase.execute(cursoEntity, request);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
