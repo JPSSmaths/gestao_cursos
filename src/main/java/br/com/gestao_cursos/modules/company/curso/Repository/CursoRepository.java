@@ -1,5 +1,6 @@
 package br.com.gestao_cursos.modules.company.curso.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,4 +10,5 @@ import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 
 public interface CursoRepository extends JpaRepository<CursoEntity, UUID>{
     Optional<CursoEntity> findByName(String name);
+    Optional<List<CursoEntity>> findAllByCompanyId(UUID companyId);
 }
