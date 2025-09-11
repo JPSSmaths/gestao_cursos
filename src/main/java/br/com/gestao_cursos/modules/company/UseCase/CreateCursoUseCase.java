@@ -1,4 +1,4 @@
-package br.com.gestao_cursos.modules.company.curso.UseCase;
+package br.com.gestao_cursos.modules.company.UseCase;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package br.com.gestao_cursos.modules.company.curso.Controllers;
+package br.com.gestao_cursos.modules.company.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.gestao_cursos.modules.company.UseCase.CreateCursoUseCase;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
-import br.com.gestao_cursos.modules.company.curso.UseCase.CreateCursoUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("company/course")
+@RequestMapping("/company/course")
 public class CursoController {
     @Autowired
     private CreateCursoUseCase createCursoUseCase;

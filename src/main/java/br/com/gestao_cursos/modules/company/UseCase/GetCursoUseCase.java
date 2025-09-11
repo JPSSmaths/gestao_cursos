@@ -1,4 +1,4 @@
-package br.com.gestao_cursos.modules.company.curso.UseCase;
+package br.com.gestao_cursos.modules.company.UseCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
