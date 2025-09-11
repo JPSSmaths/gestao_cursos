@@ -32,8 +32,8 @@ public class CursoEntity {
     @JoinColumn(name = "company_id")
     private CompanyEntity company;
 
-    @Column(insertable = false, nullable = false)
-    private UUID company_id;
+    @Column(name="company_id",insertable = false, updatable=false)
+    private UUID companyId;
 
     @CreationTimestamp
     private LocalDateTime created_at;

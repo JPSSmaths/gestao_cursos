@@ -29,7 +29,7 @@ public class CreateCursoUseCase {
 
         var company_id = UUID.fromString(request.getAttribute("company_id").toString());
         CompanyEntity company = this.companyRepository.findById(company_id).orElseThrow();
-        cursoEntity.setCompany_id(company_id);
+        cursoEntity.setCompanyId(company_id);
         cursoEntity.setCompany(company);
 
         return this.cursoRepository.save(cursoEntity);
