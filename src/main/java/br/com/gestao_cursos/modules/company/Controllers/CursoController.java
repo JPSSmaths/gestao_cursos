@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.UseCase.CreateCursoUseCase;
+import br.com.gestao_cursos.modules.company.UseCase.DeleteCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.GetCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.PutCursoUseCase;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
@@ -32,6 +34,9 @@ public class CursoController {
 
     @Autowired
     private PutCursoUseCase putCursoUseCase;
+
+    @Autowired
+    private DeleteCursoUseCase deleteCursoUseCase;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('COMPANY')")
@@ -63,6 +68,17 @@ public class CursoController {
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{curso_id}")
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<Object> delete(@PathVariable UUID curso_id){
+        try {
+            this.deleteCursoUseCase.execute(curso_id);
+            return ResponseEntity.ok().body("Course deleted");
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
