@@ -20,6 +20,7 @@ import br.com.gestao_cursos.modules.company.UseCase.DeleteCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.GetCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.PutCursoUseCase;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
+import br.com.gestao_cursos.modules.company.curso.dto.PutCursoDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -62,9 +63,9 @@ public class CursoController {
 
     @PutMapping("/put/{curso_id}")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> put(@PathVariable UUID curso_id, @RequestBody CursoEntity cursoEntity){
+    public ResponseEntity<Object> put(@PathVariable UUID curso_id, @Valid @RequestBody PutCursoDTO putCursoDTO){
         try {
-            var result = this.putCursoUseCase.execute(curso_id, cursoEntity);
+            var result = this.putCursoUseCase.execute(curso_id, putCursoDTO);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
