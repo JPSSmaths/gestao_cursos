@@ -67,7 +67,6 @@ public class CursoController {
             var result = this.putCursoUseCase.execute(curso_id, cursoEntity);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
