@@ -16,8 +16,6 @@ public class PutCursoDTO {
     @NotBlank
     private String name;
     @NotBlank
-    private String curso;
-    @NotBlank
     private String category;
     @NotNull
     private Active active;
