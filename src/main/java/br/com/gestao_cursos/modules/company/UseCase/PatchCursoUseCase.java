@@ -18,7 +18,7 @@ public class PatchCursoUseCase {
 
     public CursoEntity execute(UUID cursoId, PatchCursoDTO patchCursoDTO){
         return this.cursoRepository.findById(cursoId).map(curso -> {
-            curso.setActive(Active.valueOf(patchCursoDTO.getActive()));
+            curso.setActive(Active.valueOf(patchCursoDTO.getActive().toUpperCase()));
             return this.cursoRepository.save(curso);
         })
                 .orElseThrow(() -> {
