@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.exceptions.UserFoundException;
+import br.com.gestao_cursos.modules.company.curso.Active;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
@@ -25,8 +26,11 @@ public class PatchCursoUseCase {
                 curso.setCategory(patchCursoDTO.getCategory());
             }
 
-            if(patchCursoDTO.getActive() != null){
+            Active status = patchCursoDTO.getActive();
+            if(patchCursoDTO.getActive() != null && status == Active.ACTIVE){
                 curso.setActive(patchCursoDTO.getActive());
+            }else{
+                throw new RuntimeException("The course isnt active");
             }
 
             return this.cursoRepository.save(curso);
