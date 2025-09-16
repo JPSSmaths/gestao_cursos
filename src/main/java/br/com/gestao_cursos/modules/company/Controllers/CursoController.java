@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gestao_cursos.modules.company.UseCase.CreateCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.DeleteCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.GetCursoUseCase;
+import br.com.gestao_cursos.modules.company.UseCase.PatchCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.PutCursoUseCase;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
+import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
 import br.com.gestao_cursos.modules.company.curso.dto.PutCursoDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -38,6 +41,9 @@ public class CursoController {
 
     @Autowired
     private DeleteCursoUseCase deleteCursoUseCase;
+
+    @Autowired
+    private PatchCursoUseCase patchCursoUseCase;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('COMPANY')")
@@ -78,6 +84,16 @@ public class CursoController {
         try {
             this.deleteCursoUseCase.execute(curso_id);
             return ResponseEntity.ok().body("Course deleted");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/patch/{curso_id}")
+    public ResponseEntity<Object> patch(@PathVariable UUID curso_id, @RequestBody PatchCursoDTO patchCursoDTO){
+        try {
+            var result = this.patchCursoUseCase.execute(curso_id, patchCursoDTO);
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

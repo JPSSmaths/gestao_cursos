@@ -18,21 +18,7 @@ public class PatchCursoUseCase {
 
     public CursoEntity execute(UUID cursoId, PatchCursoDTO patchCursoDTO){
         return this.cursoRepository.findById(cursoId).map(curso -> {
-            if(patchCursoDTO.getName() != null){
-                curso.setName(patchCursoDTO.getName());
-            }
-
-            if(patchCursoDTO.getCategory() != null){
-                curso.setCategory(patchCursoDTO.getCategory());
-            }
-
-            Active status = patchCursoDTO.getActive();
-            if(patchCursoDTO.getActive() != null && status == Active.ACTIVE){
-                curso.setActive(patchCursoDTO.getActive());
-            }else{
-                throw new RuntimeException("The course isnt active");
-            }
-
+            curso.setActive(Active.valueOf(patchCursoDTO.getActive()));
             return this.cursoRepository.save(curso);
         })
                 .orElseThrow(() -> {
