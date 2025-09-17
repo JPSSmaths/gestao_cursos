@@ -10,15 +10,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.UseCase.CreateCompanyUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/company")
+@Tag(name = "Company Controller", description = "Methods responsables for company HTTP requests")
 public class CompanyController {
 
     @Autowired
     private CreateCompanyUseCase createComapnyUseCase;
 
+    @Operation(summary = "Company creation", description = "This method is responsable for company creation")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", content = {
+            @Content(schema = @Schema(implementation = CompanyEntity.class))
+        }),
+        @ApiResponse(responseCode = "400", description = "Company not created")
+    })
     @PostMapping("/create")
     public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity){
         try {
