@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.UseCase.AuthCompanyUseCase;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/company/auth")
+@Tag(name = "Company authentication", description = "Token company creation")
 public class AuthCompanyController {
     @Autowired
     private AuthCompanyUseCase authCompanyUseCase;
 
+    @Operation(summary = "Token generation", description = "This function is responsable for generate company token")
     @PostMapping("/create")
     private ResponseEntity<Object> auth(@RequestBody AuthCompanyRequestDTO authCompanyRequestDTO){
         try {
