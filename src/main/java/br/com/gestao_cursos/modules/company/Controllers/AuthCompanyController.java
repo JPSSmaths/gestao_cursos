@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.UseCase.AuthCompanyUseCase;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
+import br.com.gestao_cursos.modules.company.dto.AuthCompanyResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -21,6 +26,11 @@ public class AuthCompanyController {
     private AuthCompanyUseCase authCompanyUseCase;
 
     @Operation(summary = "Token generation", description = "This function is responsable for generate company token")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", content = {
+            @Content(schema = @Schema(implementation = AuthCompanyResponseDTO.class))
+        })
+    })
     @PostMapping("/create")
     private ResponseEntity<Object> auth(@RequestBody AuthCompanyRequestDTO authCompanyRequestDTO){
         try {
