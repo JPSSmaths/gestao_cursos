@@ -13,7 +13,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI(){
         return new OpenAPI()
-            .info(new Info().title("Gestão de cursos").description("API responsável por gestão de cursos")
+            .info(new Info().title("Course managment").description("API responsible for course management")
                 .version("1"))
             .schemaRequirement("jwt_auth", createSecurityScheme());
     }
