@@ -1,6 +1,8 @@
 package br.com.gestao_cursos.modules.company.curso.dto;
 
 import br.com.gestao_cursos.modules.company.curso.Active;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,10 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PutCursoDTO {
+    @Schema(name = "Java course", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String name;
+
+    @Schema(name = "Programming course", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String category;
+
+    @Schema(name = "INACTIVE", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Active active;
 }
