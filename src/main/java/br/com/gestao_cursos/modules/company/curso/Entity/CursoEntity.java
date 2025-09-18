@@ -27,12 +27,12 @@ public class CursoEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Schema(name = "Java course")
+    @Schema(example = "Java course")
     private String name;
-    @Schema(name = "Programming course")
+    @Schema(example = "Programming course")
     private String category;
 
-    @Schema(name = "ACTIVE")
+    @Schema(example = "ACTIVE")
     @Enumerated(EnumType.STRING)
     private Active active;
 
