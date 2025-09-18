@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.curso.Active;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,9 +27,12 @@ public class CursoEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Schema(name = "Java course")
     private String name;
+    @Schema(name = "Programming course")
     private String category;
 
+    @Schema(name = "ACTIVE")
     @Enumerated(EnumType.STRING)
     private Active active;
 
