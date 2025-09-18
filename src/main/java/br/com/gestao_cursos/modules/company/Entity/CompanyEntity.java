@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,15 +23,19 @@ public class CompanyEntity {
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
 
+    @Schema(example = "accenture_company")
     @Pattern(regexp = "\\S+", message = "The [username] field cannot contain blank spaces")
     private String username;
 
+    @Schema(example = "accenture_123")
     @Length(min = 5, max = 100, message = "The [password] field have to be between 5 and 10 characteres")
     private String password;
 
+    @Schema(example = "accenture@gmail.com")
     @Email(message = "The fieled [email] have to be valid")
     private String email;
 
+    @Schema(example = "technology consulting company")
     private String description;
 
     @CreationTimestamp
