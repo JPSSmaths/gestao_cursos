@@ -90,6 +90,7 @@ public class CursoController {
     }
 
     @PatchMapping("/patch/{curso_id}")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Object> patch(@PathVariable UUID curso_id, @RequestBody PatchCursoDTO patchCursoDTO){
         try {
             var result = this.patchCursoUseCase.execute(curso_id, patchCursoDTO);
