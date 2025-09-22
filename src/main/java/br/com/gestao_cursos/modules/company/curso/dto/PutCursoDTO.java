@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PutCursoDTO {
-    @Schema(name = "Java course", requiredMode = RequiredMode.REQUIRED)
+    @Schema(example = "Java course", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String name;
 
-    @Schema(name = "Programming course", requiredMode = RequiredMode.REQUIRED)
+    @Schema(example = "Programming course", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String category;
 
-    @Schema(name = "INACTIVE", requiredMode = RequiredMode.REQUIRED)
+    @Schema(example = "INACTIVE", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Active active;
 }
