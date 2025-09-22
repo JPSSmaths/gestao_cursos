@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.UseCase.CreateCompanyUseCase;
+import br.com.gestao_cursos.modules.company.dto.CreateCompanyDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,9 +35,9 @@ public class CompanyController {
         @ApiResponse(responseCode = "400", description = "Company not created")
     })
     @PostMapping("/create")
-    public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity){
+    public ResponseEntity<Object> create(@Valid @RequestBody CreateCompanyDTO createCompanyDTO){
         try {
-            var result = this.createComapnyUseCase.create(companyEntity);
+            var result = this.createComapnyUseCase.create(createCompanyDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
             e.printStackTrace();

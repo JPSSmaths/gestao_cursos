@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import br.com.gestao_cursos.exceptions.UserFoundException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
+import br.com.gestao_cursos.modules.company.dto.CreateCompanyDTO;
 
 @Service
 public class CreateCompanyUseCase {
@@ -16,11 +17,18 @@ public class CreateCompanyUseCase {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public CompanyEntity create(CompanyEntity companyEntity){
-        this.companyRepository.findByUsernameOrEmail(companyEntity.getUsername(), companyEntity.getEmail())
+    public CompanyEntity create(CreateCompanyDTO createCompanyDTO){
+        this.companyRepository.findByUsernameOrEmail(createCompanyDTO.getUsername(), createCompanyDTO.getEmail())
             .ifPresent(user -> {
                 throw new UserFoundException("Usuário já existe");
             });
+        
+        var companyEntity = CompanyEntity.builder()
+            .username(createCompanyDTO.getUsername())
+            .password(createCompanyDTO.getPassword())
+            .email(createCompanyDTO.getEmail())
+            .description(createCompanyDTO.getDescription())
+            .build();
 
         var passwordEncoded = this.passwordEncoder.encode(companyEntity.getPassword());
         companyEntity.setPassword(passwordEncoded);
