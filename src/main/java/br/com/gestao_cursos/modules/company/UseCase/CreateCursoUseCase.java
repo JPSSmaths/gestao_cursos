@@ -10,6 +10,7 @@ import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
+import br.com.gestao_cursos.modules.company.curso.dto.CreateCursoDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
@@ -20,12 +21,18 @@ public class CreateCursoUseCase {
 
     @Autowired
     private CompanyRepository companyRepository;
-    
-    public CursoEntity execute(CursoEntity cursoEntity, HttpServletRequest request){
-        this.cursoRepository.findByName(cursoEntity.getName())
-        .ifPresent(user -> {
-            throw new UserFoundException("Usuário já existe");
-        });
+
+    public CursoEntity execute(CreateCursoDTO createCursoDTO, HttpServletRequest request) {
+        this.cursoRepository.findByName(createCursoDTO.getName())
+                .ifPresent(user -> {
+                    throw new UserFoundException("Usuário já existe");
+                });
+
+        var cursoEntity = CursoEntity.builder()
+                .name(createCursoDTO.getName())
+                .category(createCursoDTO.getCategory())
+                .active(createCursoDTO.getActive())
+                .build();
 
         var company_id = UUID.fromString(request.getAttribute("company_id").toString());
         CompanyEntity company = this.companyRepository.findById(company_id).orElseThrow();

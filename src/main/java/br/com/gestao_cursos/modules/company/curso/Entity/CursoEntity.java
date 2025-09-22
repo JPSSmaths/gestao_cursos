@@ -18,17 +18,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "course")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CursoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Schema(example = "Java course")
+    @Column(unique=true, nullable=false)
     private String name;
+
     @Schema(example = "Programming course")
     private String category;
 

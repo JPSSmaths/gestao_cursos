@@ -23,6 +23,7 @@ import br.com.gestao_cursos.modules.company.UseCase.GetCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.PatchCursoUseCase;
 import br.com.gestao_cursos.modules.company.UseCase.PutCursoUseCase;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
+import br.com.gestao_cursos.modules.company.curso.dto.CreateCursoDTO;
 import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
 import br.com.gestao_cursos.modules.company.curso.dto.PutCursoDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,9 +65,9 @@ public class CursoController {
     @SecurityRequirement(name = "jwt_auth")
     @PostMapping("/create")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> create(@Valid @RequestBody CursoEntity cursoEntity, HttpServletRequest request){
+    public ResponseEntity<Object> create(@Valid @RequestBody CreateCursoDTO createCursoDTO, HttpServletRequest request){
         try {
-            var result = this.createCursoUseCase.execute(cursoEntity, request);
+            var result = this.createCursoUseCase.execute(createCursoDTO, request);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
