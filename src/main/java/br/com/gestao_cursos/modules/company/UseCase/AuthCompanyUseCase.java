@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import br.com.gestao_cursos.exceptions.UserFoundException;
+import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyResponseDTO;
@@ -30,10 +30,10 @@ public class AuthCompanyUseCase {
     
     public AuthCompanyResponseDTO auth(AuthCompanyRequestDTO authCompanyRequestDTO){
         var company = this.companyRepository.findByUsernameOrEmail(authCompanyRequestDTO.getUsername(), null)
-        .orElseThrow(() -> new UserFoundException("Usuário não cadastrado"));
+        .orElseThrow(() -> new CompanyAlredyExistsException("Usuário não cadastrado"));
 
         if(!this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword())){
-            throw new UserFoundException("Senha inválida");
+            throw new CompanyAlredyExistsException("Senha inválida");
         }
 
         var expires_in = Instant.now().plus(Duration.ofHours(2));

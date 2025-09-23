@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.gestao_cursos.exceptions.UserFoundException;
+import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.CreateCompanyDTO;
@@ -20,7 +20,7 @@ public class CreateCompanyUseCase {
     public CompanyEntity create(CreateCompanyDTO createCompanyDTO){
         this.companyRepository.findByUsernameOrEmail(createCompanyDTO.getUsername(), createCompanyDTO.getEmail())
             .ifPresent(user -> {
-                throw new UserFoundException("Usuário já existe");
+                throw new CompanyAlredyExistsException("Usuário já existe");
             });
         
         var companyEntity = CompanyEntity.builder()
