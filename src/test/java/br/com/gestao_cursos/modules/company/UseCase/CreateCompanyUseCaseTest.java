@@ -2,6 +2,7 @@ package br.com.gestao_cursos.modules.company.UseCase;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 
@@ -38,7 +40,7 @@ public class CreateCompanyUseCaseTest {
             var companyExistent = company;
             this.companyRepository.save(companyExistent);
         } catch (Exception e) {
-            
+            assertThat(e).isInstanceOf(CompanyAlredyExistsException.class);
         }
     }
 }
