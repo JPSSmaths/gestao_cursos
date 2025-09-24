@@ -1,7 +1,7 @@
 package br.com.gestao_cursos.exceptions;
 
 public class CompanyAlredyExistsException extends RuntimeException{
-    public CompanyAlredyExistsException(String usuario_found){
+    public CompanyAlredyExistsException(){
         super("Company alredy exist");
     }
 }

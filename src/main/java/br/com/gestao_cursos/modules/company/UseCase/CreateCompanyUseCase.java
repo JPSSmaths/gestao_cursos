@@ -20,7 +20,7 @@ public class CreateCompanyUseCase {
     public CompanyEntity create(CreateCompanyDTO createCompanyDTO){
         this.companyRepository.findByUsernameOrEmail(createCompanyDTO.getUsername(), createCompanyDTO.getEmail())
             .ifPresent(user -> {
-                throw new CompanyAlredyExistsException("Usuário já existe");
+                throw new CompanyAlredyExistsException();
             });
         
         var companyEntity = CompanyEntity.builder()

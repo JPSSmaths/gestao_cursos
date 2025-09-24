@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
+import br.com.gestao_cursos.exceptions.CursoAlredyExistsException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
@@ -25,7 +25,7 @@ public class CreateCursoUseCase {
     public CursoEntity execute(CreateCursoDTO createCursoDTO, HttpServletRequest request) {
         this.cursoRepository.findByName(createCursoDTO.getName())
                 .ifPresent(user -> {
-                    throw new CompanyAlredyExistsException("Usuário já existe");
+                    throw new CursoAlredyExistsException();
                 });
 
         var cursoEntity = CursoEntity.builder()

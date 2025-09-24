@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
+import br.com.gestao_cursos.exceptions.CursoNotFoundException;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -20,7 +20,7 @@ public class GetCursoUseCase {
 
         List cursos = this.cursoRepository.findAllByCompanyId(companyId)
             .orElseThrow(() -> {
-                throw new CompanyAlredyExistsException("Company not found");
+                throw new CursoNotFoundException();
             });
         
         return cursos;
