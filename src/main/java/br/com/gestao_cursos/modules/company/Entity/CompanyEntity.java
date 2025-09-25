@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,6 +40,7 @@ public class CompanyEntity {
 
     @Schema(example = "accenture@gmail.com")
     @Email(message = "The fieled [email] have to be valid")
+    @Column(unique=true)
     private String email;
 
     @Schema(example = "technology consulting company")
