@@ -67,7 +67,8 @@ public class CursoController {
     @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateCursoDTO createCursoDTO, HttpServletRequest request){
         try {
-            var result = this.createCursoUseCase.execute(createCursoDTO, request);
+            var id = UUID.fromString(request.getAttribute("company_id").toString());
+            var result = this.createCursoUseCase.execute(createCursoDTO, id);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -86,7 +87,8 @@ public class CursoController {
     @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Object> get(HttpServletRequest request){
         try {
-            var result = this.getCursoUseCase.execute(request);
+            var id = UUID.fromString(request.getAttribute("company_id").toString()); 
+            var result = this.getCursoUseCase.execute(id);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

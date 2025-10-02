@@ -8,16 +8,13 @@ import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.exceptions.CursoNotFoundException;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
-import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class GetCursoUseCase {
     @Autowired
     private CursoRepository cursoRepository;
 
-    public List execute(HttpServletRequest request){
-        var companyId = UUID.fromString(request.getAttribute("company_id").toString());
-
+    public List execute(UUID companyId){
         List cursos = this.cursoRepository.findAllByCompanyId(companyId)
             .orElseThrow(() -> {
                 throw new CursoNotFoundException();

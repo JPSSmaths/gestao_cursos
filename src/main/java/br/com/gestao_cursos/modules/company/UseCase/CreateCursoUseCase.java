@@ -11,7 +11,6 @@ import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.curso.dto.CreateCursoDTO;
-import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class CreateCursoUseCase {
@@ -22,7 +21,7 @@ public class CreateCursoUseCase {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public CursoEntity execute(CreateCursoDTO createCursoDTO, HttpServletRequest request) {
+    public CursoEntity execute(CreateCursoDTO createCursoDTO, UUID company_id) {
         this.cursoRepository.findByName(createCursoDTO.getName())
                 .ifPresent(user -> {
                     throw new CursoAlredyExistsException();
@@ -34,7 +33,6 @@ public class CreateCursoUseCase {
                 .active(createCursoDTO.getActive())
                 .build();
 
-        var company_id = UUID.fromString(request.getAttribute("company_id").toString());
         CompanyEntity company = this.companyRepository.findById(company_id).orElseThrow();
         cursoEntity.setCompanyId(company_id);
         cursoEntity.setCompany(company);
