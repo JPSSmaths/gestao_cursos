@@ -9,7 +9,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 public class TestUtils {
-    private static String generateToken(UUID companyId, String secret){
+    public static String generateToken(UUID companyId, String secret){
         Algorithm algorithm = Algorithm.HMAC256(secret);
 
         var expires_in = Instant.now().plus(Duration.ofMinutes(10));
