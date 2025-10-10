@@ -2,6 +2,9 @@ package br.com.gestao_cursos.modules.company.UseCase;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,9 +23,16 @@ public class GetCursoUseCaseTest {
     @Mock
     private CursoRepository cursoRepository;
 
+    @Test
     public void should_be_able_extract_a_company_id_from_token(){
-        String token = TestUtils.generateToken(UUID.randomUUID(), "COMPANY_123");
+        UUID esperado = UUID.randomUUID();
+        String token = TestUtils.generateToken(esperado, "COMPANY_123");
 
         UUID companyId = UUID.fromString(JWTCompanyProviderTest.decodeToken(token).getSubject());
+
+        assertNotNull(companyId);
+        assertEquals(esperado, companyId);
     }
+
+    
 }
