@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.gestao_cursos.exceptions.CursoNotFoundException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
+import br.com.gestao_cursos.modules.company.curso.Active;
+import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
+import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class PatchCursoUseCaseTest {
@@ -34,5 +38,27 @@ public class PatchCursoUseCaseTest {
         assertThatThrownBy(() -> {
             this.patchCursoUseCase.execute(company.getId(), null);
         }).isInstanceOf(CursoNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("Should be able to update a existent course")
+    public void should_be_able_update_a_existent_course() {
+        PatchCursoDTO patchCursoDTO = PatchCursoDTO.builder()
+                .active("ACTIVE")
+                .build();
+        
+        CursoEntity course = CursoEntity.builder()
+                .active(Enum.valueOf(Active.class, patchCursoDTO.active()))
+                .build();
+        
+        CursoEntity courseUpdated = course;
+        courseUpdated.setActive(Enum.valueOf(Active.class, "INACTIVE"));
+
+        when(this.cursoRepository.findById(course.getId())).thenReturn(Optional.of(course));
+        when(this.cursoRepository.save(course)).thenReturn(courseUpdated);
+
+        this.patchCursoUseCase.execute(course.getId(), patchCursoDTO);
+
+        assertEquals(course, courseUpdated);
     }
 }
