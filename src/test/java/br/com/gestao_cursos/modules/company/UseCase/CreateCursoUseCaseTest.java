@@ -3,6 +3,7 @@ package br.com.gestao_cursos.modules.company.UseCase;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,6 +68,30 @@ public class CreateCursoUseCaseTest {
 
         assertThatThrownBy(() -> this.createCursoUseCase.execute(createCursoDTO, companyEntity.getId()))
                 .isInstanceOf(CompanyNotFoundException.class);
+    }
+
+    public void should_be_able_to_create_a_course_that_does_not_exist() {
+        CreateCursoDTO createCursoDTO = CreateCursoDTO.builder()
+                .name("Java")
+                .build();
+
+        CursoEntity cursoEntity = CursoEntity.builder()
+                .name(createCursoDTO.getName())
+                .build();
+
+        CompanyEntity companyEntity = CompanyEntity.builder()
+                .id(UUID.randomUUID())
+                .build();
+
+        when(cursoRepository.findByName(createCursoDTO.getName())).thenReturn(Optional.empty());
+        when(this.companyRepository.findById(companyEntity.getId())).thenReturn(Optional.of(companyEntity));
+        when(this.cursoRepository.save(cursoEntity)).thenReturn(cursoEntity);
+
+        CursoEntity createdCurso = this.createCursoUseCase.execute(createCursoDTO, companyEntity.getId());
+
+        assert createdCurso != null;
+        assert createdCurso.getCompanyId().equals(companyEntity.getId());
+        assertThat(createdCurso).hasFieldOrProperty("id");
     }
 
 
