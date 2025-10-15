@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -36,5 +38,19 @@ public class DeleteCursoUseCaseTest {
         assertThatThrownBy(() -> {
             this.deleteCursoUseCase.execute(course.getId());
         }).isInstanceOf(CursoNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("Should be able delete an existing course")
+    public void should_be_able_delete_an_existing_course(){
+        CursoEntity course = CursoEntity.builder()
+                .name("COURSE-TEST")
+                .build();
+
+        when(this.cursoRepository.findById(course.getId())).thenReturn(Optional.of(course));
+
+        this.deleteCursoUseCase.execute(course.getId());
+
+        verify(this.cursoRepository, times(1)).delete(course);
     }
 }
