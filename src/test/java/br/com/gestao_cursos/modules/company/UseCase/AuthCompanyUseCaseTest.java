@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.gestao_cursos.exceptions.CompanyNotFoundException;
+import br.com.gestao_cursos.exceptions.InvalidPasswordException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
@@ -48,5 +49,29 @@ public class AuthCompanyUseCaseTest {
 
         assertThatThrownBy(() -> this.authCompanyUseCase.auth(authCompanyRequestDTO))
             .isInstanceOf(CompanyNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("Should not be able to generate token with a invalid password")
+    public void  should_not_be_able_to_generate_token_with_a_invalid_password(){
+        var authCompanyRequestDTO = AuthCompanyRequestDTO.builder()
+            .username("COMPANY_TEST")
+            .password("PASSWORD_TEST")
+            .build();
+
+        CompanyEntity company = CompanyEntity.builder()
+            .id(UUID.randomUUID())
+            .username(authCompanyRequestDTO.getUsername())
+            .password("HASHED_PASSWORD_TEST")
+            .build();
+        
+        when(this.companyRepository.findByUsernameOrEmail(company.getUsername(), null))
+            .thenReturn(Optional.of(company));
+
+        when(this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword()))
+            .thenReturn(false);
+
+        assertThatThrownBy(() -> this.authCompanyUseCase.auth(authCompanyRequestDTO))
+            .isInstanceOf(InvalidPasswordException.class);
     }
 }

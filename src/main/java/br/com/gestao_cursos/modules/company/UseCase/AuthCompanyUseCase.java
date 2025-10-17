@@ -13,6 +13,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import br.com.gestao_cursos.exceptions.CompanyNotFoundException;
+import br.com.gestao_cursos.exceptions.InvalidPasswordException;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyResponseDTO;
@@ -33,7 +34,7 @@ public class AuthCompanyUseCase {
         .orElseThrow(() -> new CompanyNotFoundException());
 
         if(!this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword())){
-            throw new RuntimeException("Senha inválida");
+            throw new InvalidPasswordException();
         }
 
         var expires_in = Instant.now().plus(Duration.ofHours(2));
