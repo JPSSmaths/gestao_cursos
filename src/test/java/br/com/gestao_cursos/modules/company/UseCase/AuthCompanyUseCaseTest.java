@@ -3,7 +3,9 @@ package br.com.gestao_cursos.modules.company.UseCase;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +31,12 @@ public class AuthCompanyUseCaseTest {
 
     @Mock
     private CompanyRepository companyRepository;
+
+    @BeforeEach
+    public void setup() {
+        String secret = "MY_SECRET_KEY";
+        authCompanyUseCase = new AuthCompanyUseCase(secret, passwordEncoder, companyRepository);
+    }
 
     @Test
     @DisplayName("Should not be able to generate token with a valid company")
@@ -73,5 +81,29 @@ public class AuthCompanyUseCaseTest {
 
         assertThatThrownBy(() -> this.authCompanyUseCase.auth(authCompanyRequestDTO))
             .isInstanceOf(InvalidPasswordException.class);
+    }
+
+    @Test
+    @DisplayName("Should be able to generate token with valid credentials")
+    public void should_be_able_to_generate_token_with_valid_credentials(){
+        var authCompanyRequestDTO = AuthCompanyRequestDTO.builder()
+            .username("COMPANY_TEST")
+            .password("PASSWORD_TEST")
+            .build();
+
+        CompanyEntity company = CompanyEntity.builder()
+            .id(UUID.randomUUID())
+            .username(authCompanyRequestDTO.getUsername())
+            .password("HASHED_PASSWORD_TEST")
+            .build();
+        
+        when(this.companyRepository.findByUsernameOrEmail(company.getUsername(), null))
+            .thenReturn(Optional.of(company));
+
+        when(this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword()))
+            .thenReturn(true);
+
+        var result = this.authCompanyUseCase.auth(authCompanyRequestDTO);
+        assertThat(result).hasFieldOrProperty("acess_token");
     }
 }

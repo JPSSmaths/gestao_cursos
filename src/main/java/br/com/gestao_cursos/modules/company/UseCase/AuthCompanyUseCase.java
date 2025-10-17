@@ -20,20 +20,25 @@ import br.com.gestao_cursos.modules.company.dto.AuthCompanyResponseDTO;
 
 @Service
 public class AuthCompanyUseCase {
-    @Value("${security.jwt.secret.company}")
-    private String secret;
+    private final String secret;
+    private final PasswordEncoder passwordEncoder;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AuthCompanyUseCase(
+            @Value("${security.jwt.secret.company}") String secret,
+            PasswordEncoder passwordEncoder,
+            CompanyRepository companyRepository) {
+        this.secret = secret;
+        this.passwordEncoder = passwordEncoder;
+        this.companyRepository = companyRepository;
+    }
 
-    @Autowired
-    private CompanyRepository companyRepository;
-    
-    public AuthCompanyResponseDTO auth(AuthCompanyRequestDTO authCompanyRequestDTO){
+    public AuthCompanyResponseDTO auth(AuthCompanyRequestDTO authCompanyRequestDTO) {
         var company = this.companyRepository.findByUsernameOrEmail(authCompanyRequestDTO.getUsername(), null)
-        .orElseThrow(() -> new CompanyNotFoundException());
+                .orElseThrow(() -> new CompanyNotFoundException());
 
-        if(!this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword())){
+        if (!this.passwordEncoder.matches(authCompanyRequestDTO.getPassword(), company.getPassword())) {
             throw new InvalidPasswordException();
         }
 
@@ -41,17 +46,17 @@ public class AuthCompanyUseCase {
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
         var token = JWT.create()
-            .withIssuer("cursos-programação")
-            .withSubject(company.getId().toString())
-            .withClaim("roles", Arrays.asList("ROLE_COMPANY"))
-            .withExpiresAt(expires_in)
-            .sign(algorithm);
+                .withIssuer("cursos-programação")
+                .withSubject(company.getId().toString())
+                .withClaim("roles", Arrays.asList("ROLE_COMPANY"))
+                .withExpiresAt(expires_in)
+                .sign(algorithm);
 
         AuthCompanyResponseDTO authCompanyResponseDTO = AuthCompanyResponseDTO.builder()
-            .acess_token(token)
-            .expires_in(expires_in.toEpochMilli())
-            .build();
-        
+                .acess_token(token)
+                .expires_in(expires_in.toEpochMilli())
+                .build();
+
         return authCompanyResponseDTO;
     }
 

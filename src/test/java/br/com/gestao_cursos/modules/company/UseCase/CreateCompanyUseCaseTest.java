@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import br.com.gestao_cursos.exceptions.CompanyAlredyExistsException;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
-import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
 import br.com.gestao_cursos.modules.company.dto.CreateCompanyDTO;
 
 @ExtendWith(MockitoExtension.class)
