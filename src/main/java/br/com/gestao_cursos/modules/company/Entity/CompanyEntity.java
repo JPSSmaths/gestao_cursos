@@ -35,7 +35,7 @@ public class CompanyEntity {
     private String username;
 
     @Schema(example = "accenture_123")
-    @Length(min = 5, max = 100, message = "The [password] field have to be between 5 and 10 characteres")
+    @Length(min = 5, max = 100, message = "The [password] field have to be between 5 and 100 characteres")
     private String password;
 
     @Schema(example = "accenture@gmail.com")
