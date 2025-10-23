@@ -117,4 +117,39 @@ public class CreateCompanyControllerTest {
                                                 .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
+
+        @Test
+        @DisplayName("Should not be able to create a new company with a passoword too short")
+        public void should_not_be_able_to_create_a_new_company_with_a_passoword_too_short() throws Exception {
+                var companyDTO = CreateCompanyDTO.builder()
+                                .username("COMPANY_TEST")
+                                .description("DESCRIPTION_TEST")
+                                .email("company@gmail.com")
+                                .password("123")
+                                .build();
+
+                this.mockMvc.perform(
+                                MockMvcRequestBuilders.post("/company/create")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("Should not be able to create a new company with a passoword too long")
+        public void should_not_be_able_to_create_a_new_company_with_a_passoword_too_long() throws Exception {
+                var companyDTO = CreateCompanyDTO.builder()
+                                .username("COMPANY_TEST")
+                                .description("DESCRIPTION_TEST")
+                                .email("company@gmail.com")
+                                .password("a".repeat(101))
+                                .build();
+
+                this.mockMvc.perform(
+                                MockMvcRequestBuilders.post("/company/create")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
 }
