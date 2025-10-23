@@ -84,4 +84,21 @@ public class CreateCompanyControllerTest {
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
+        @Test
+        @DisplayName("Should not be able to create a new company with invalid email")
+        public void should_not_be_able_to_create_a_new_company_with_invalid_email() throws Exception {
+                var companyDTO = CreateCompanyDTO.builder()
+                                .username("NEW_COMPANY")
+                                .description("DESCRIPTION_TEST")
+                                .email("invalid_email_format")
+                                .password("1234567890")
+                                .build();
+
+                var result = this.mockMvc.perform(
+                                MockMvcRequestBuilders.post("/company/create")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
 }
