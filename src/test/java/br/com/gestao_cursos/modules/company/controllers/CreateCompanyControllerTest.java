@@ -51,7 +51,7 @@ public class CreateCompanyControllerTest {
                                 .password("1234567890")
                                 .build();
 
-                var result = this.mockMvc.perform(
+                this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
@@ -77,7 +77,7 @@ public class CreateCompanyControllerTest {
 
                 companyRepository.saveAndFlush(existingCompany);
 
-                var result = this.mockMvc.perform(
+                this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
@@ -94,7 +94,7 @@ public class CreateCompanyControllerTest {
                                 .password("1234567890")
                                 .build();
 
-                var result = this.mockMvc.perform(
+                this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
@@ -111,7 +111,7 @@ public class CreateCompanyControllerTest {
                                 .password("1234567890")
                                 .build();
 
-                var result = this.mockMvc.perform(
+                this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
