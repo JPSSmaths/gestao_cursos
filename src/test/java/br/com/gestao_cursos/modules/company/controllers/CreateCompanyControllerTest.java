@@ -152,4 +152,20 @@ public class CreateCompanyControllerTest {
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
+        @Test
+        @DisplayName("Should not be able to create a compny without all required fields")
+        public void should_not_be_able_to_create_a_compny_without_all_required_fields() throws Exception{
+                var companyDTO = CreateCompanyDTO.builder()
+                                .description("DESCRIPTION_TEST")
+                                .email("company@gmail.com")
+                                .password("a".repeat(101))
+                                .build();
+
+                this.mockMvc.perform(
+                        MockMvcRequestBuilders.post("/company/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        }
+
 }
