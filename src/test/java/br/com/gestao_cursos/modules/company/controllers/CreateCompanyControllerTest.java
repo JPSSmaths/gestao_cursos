@@ -19,7 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.CreateCompanyDTO;
-import br.com.gestao_cursos.modules.company.utils.JWTCompanyProviderTest;
+import br.com.gestao_cursos.modules.company.utils.TestUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -54,7 +54,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isCreated());
         }
 
@@ -80,7 +80,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -97,7 +97,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -114,7 +114,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -131,7 +131,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -148,7 +148,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                                 MockMvcRequestBuilders.post("/company/create")
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                                                .content(TestUtils.objectToJSON(companyDTO)))
                                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -164,7 +164,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/company/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JWTCompanyProviderTest.objectToJSON(companyDTO)))
+                        .content(TestUtils.objectToJSON(companyDTO)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
@@ -190,7 +190,7 @@ public class CreateCompanyControllerTest {
                 this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/company/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JWTCompanyProviderTest.objectToJSON(companyDTO))
+                        .content(TestUtils.objectToJSON(companyDTO))
                 ).andExpect(MockMvcResultMatchers.status().isBadRequest());
         }
 
