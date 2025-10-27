@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.exceptions.CompanyNotFoundException;
+import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 
 @Service
@@ -14,12 +15,15 @@ public class GetCursoUseCase {
     @Autowired
     private CursoRepository cursoRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     public List execute(UUID companyId){
-        List cursos = this.cursoRepository.findAllByCompanyId(companyId)
-            .orElseThrow(() -> {
-                throw new CompanyNotFoundException();
-            });
-        
-        return cursos;
+        if (!companyRepository.existsById(companyId)) {
+            throw new CompanyNotFoundException();
+        }
+
+        return cursoRepository.findAllByCompanyId(companyId)
+            .orElseThrow(() -> new RuntimeException("No courses found"));
     }
 }

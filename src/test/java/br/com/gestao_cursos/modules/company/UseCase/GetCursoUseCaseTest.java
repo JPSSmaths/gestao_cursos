@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.gestao_cursos.exceptions.CompanyNotFoundException;
+import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 
@@ -27,12 +28,15 @@ public class GetCursoUseCaseTest {
     @Mock
     private CursoRepository cursoRepository;
 
+    @Mock
+    private CompanyRepository companyRepository;
+
     @Test
     @DisplayName("Should not be able list courses of a company that not exists")
     public void should_not_be_able_list_courses_of_a_company_that_not_exists(){
         UUID companyId = UUID.randomUUID();
 
-        when(this.cursoRepository.findAllByCompanyId(companyId)).thenReturn(Optional.empty());
+        when(this.companyRepository.existsById(companyId)).thenReturn(false);
 
         assertThatThrownBy(() -> {
             this.getCursoUseCase.execute(companyId);
