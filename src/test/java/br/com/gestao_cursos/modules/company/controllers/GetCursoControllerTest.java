@@ -1,5 +1,6 @@
 package br.com.gestao_cursos.modules.company.controllers;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -18,7 +19,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
+import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.utils.TestUtils;
 
@@ -53,5 +56,32 @@ public class GetCursoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", TestUtils.generateToken(nonExistentCompanyId)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should return courses for valid company with courses")
+    public void should_return_courses_for_valid_company_with_courses() throws Exception{
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .password("PASSOWRD_TEST")
+        .email("email@gmail.com")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        this.cursoRepository.saveAll(
+            Arrays.asList(CursoEntity.builder().name("JAVA_TEST").company(companyEntity).build(),
+                CursoEntity.builder().name("C_TEST").company(companyEntity).build())
+        );
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/company/course/get")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
+        )
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+        .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("JAVA_TEST"))
+        .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("C_TEST"));
     }
 }
