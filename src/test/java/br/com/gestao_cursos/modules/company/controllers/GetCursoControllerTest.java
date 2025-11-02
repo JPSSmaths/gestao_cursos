@@ -85,5 +85,23 @@ public class GetCursoControllerTest {
         .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("C_TEST"));
     }
 
-    
+    @Test
+    @DisplayName("Should return empty list when company has no courses")
+    public void should_return_empty_list_when_company_has_no_courses() throws Exception{
+        CompanyEntity company = CompanyEntity.builder()
+        .username("COMPANY_TETS")
+        .password("PASSWORD_TEST")
+        .email("EMAIL@gmail.com")
+        .build();
+
+        this.companyRepository.saveAndFlush(company);
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/company/course/get")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", TestUtils.generateToken(company.getId()))
+        )
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
+    }
 }
