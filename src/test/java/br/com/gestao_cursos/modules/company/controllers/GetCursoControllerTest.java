@@ -114,5 +114,12 @@ public class GetCursoControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
-
+    @Test
+    @DisplayName("Should not allow acess without authentication token")
+    public void should_not_allow_acess_without_authentication_token() throws Exception{
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/company/course/get")
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
