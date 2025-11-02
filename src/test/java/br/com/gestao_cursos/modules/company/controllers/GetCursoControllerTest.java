@@ -104,4 +104,15 @@ public class GetCursoControllerTest {
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
         .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
+
+    @Test
+    @DisplayName("Should not allow acess with inavalid token")
+    public void should_not_allow_acess_with_inavalid_token() throws Exception{
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/company/course/get")
+            .header("Authorization", "Bearer INVALID.TOKE.VALUE")
+        ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+
 }
