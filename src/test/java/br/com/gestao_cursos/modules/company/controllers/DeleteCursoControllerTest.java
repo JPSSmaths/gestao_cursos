@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +26,7 @@ import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.utils.TestUtils;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class DeleteCursoControllerTest {
     private MockMvc mockMvc;
@@ -71,5 +72,9 @@ public class DeleteCursoControllerTest {
         assertTrue(this.companyRepository.findById(companyEntity.getId()).isPresent());
     }
 
-    
+    @Test
+    @DisplayName("Should not be able delete a company of non existent company")
+    public void should_not_be_able_delete_a_company_of_non_existent_company(){
+
+    }
 }
