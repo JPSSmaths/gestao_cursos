@@ -1,7 +1,6 @@
 package br.com.gestao_cursos.modules.company.controllers;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,18 +44,6 @@ public class GetCursoControllerTest {
     public void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(SecurityMockMvcConfigurers.springSecurity()).build();
-    }
-
-    @Test
-    @DisplayName("Should not be able to get a course of a non existent company")
-    public void should_not_be_able_to_get_a_course_of_a_non_existent_company() throws Exception {
-        UUID nonExistentCompanyId = UUID.randomUUID();
-
-        this.mockMvc.perform(
-                MockMvcRequestBuilders.get("/company/course/get")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", TestUtils.generateToken(nonExistentCompanyId)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test

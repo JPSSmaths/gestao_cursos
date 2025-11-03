@@ -63,7 +63,7 @@ public class DeleteCursoControllerTest {
         this.cursoRepository.saveAndFlush(cursoEntity);
 
         this.mockMvc.perform(
-            MockMvcRequestBuilders.delete("/company/course/{id}", cursoEntity.getId())
+            MockMvcRequestBuilders.delete("/company/course/delete/{id}", cursoEntity.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
         ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -72,9 +72,5 @@ public class DeleteCursoControllerTest {
         assertTrue(this.companyRepository.findById(companyEntity.getId()).isPresent());
     }
 
-    @Test
-    @DisplayName("Should not be able delete a company of non existent company")
-    public void should_not_be_able_delete_a_company_of_non_existent_company(){
-
-    }
+    
 }
