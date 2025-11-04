@@ -49,4 +49,13 @@ public class PutCursoControllerTest {
             MockMvcRequestBuilders.put("/company/course/update/{course_id}", UUID.randomUUID())
         ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
+
+    @Test
+    @DisplayName("Should not be able update a course with a invalid token")
+    public void should_not_be_able_update_a_course_with_a_invalid_token() throws Exception{
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.put("/company/course/update/{course_id}", UUID.randomUUID())
+            .header("Authorization", "Bearer INVALID.TOKEN.VALUE")
+        ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
 }
