@@ -106,5 +106,12 @@ public class DeleteCursoControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
-    
+    @Test
+    @DisplayName("Should not be able delete a course without authentication token")
+    public void should_not_be_able_delete_a_course_without_authentication_token() throws Exception{
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.delete("/company/course/delete/{id}", UUID.randomUUID())
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
