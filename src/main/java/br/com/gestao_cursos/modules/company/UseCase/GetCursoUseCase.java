@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.gestao_cursos.exceptions.CompanyNotFoundException;
 import br.com.gestao_cursos.exceptions.CursoNotFoundException;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
@@ -20,10 +19,6 @@ public class GetCursoUseCase {
     private CompanyRepository companyRepository;
 
     public List execute(UUID companyId){
-        if (!companyRepository.existsById(companyId)) {
-            throw new CompanyNotFoundException();
-        }
-
         return cursoRepository.findAllByCompanyId(companyId)
             .orElseThrow(() -> new CursoNotFoundException());
     }

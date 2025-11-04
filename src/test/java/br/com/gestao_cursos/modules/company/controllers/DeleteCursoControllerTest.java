@@ -1,5 +1,7 @@
 package br.com.gestao_cursos.modules.company.controllers;
 
+import java.util.UUID;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -72,5 +74,27 @@ public class DeleteCursoControllerTest {
         assertTrue(this.companyRepository.findById(companyEntity.getId()).isPresent());
     }
 
-    
+    @Test
+    @DisplayName("Should not be able delete a non existent course")
+    public void should_not_be_able_delete_a_non_existent_course() throws Exception{
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .password("PASSWORD_TEST")
+        .email("EMAIL@gmail.com")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        UUID inexistentCourseUuid = UUID.randomUUID();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.delete("/company/course/delete/{id}", inexistentCourseUuid)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        assertFalse(this.cursoRepository.findById(inexistentCourseUuid).isPresent());
+    }
+
+
 }
