@@ -98,7 +98,7 @@ public class GetCursoControllerTest {
     public void should_not_allow_acess_with_inavalid_token() throws Exception{
         this.mockMvc.perform(
             MockMvcRequestBuilders.get("/company/course/get")
-            .header("Authorization", "Bearer INVALID.TOKE.VALUE")
+            .header("Authorization", "Bearer INVALID.TOKEN.VALUE")
         ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
