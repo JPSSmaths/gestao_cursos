@@ -122,4 +122,33 @@ public class PutCursoControllerTest {
             .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
+
+    @Test
+    @DisplayName("Should not be able to update a course without required fields")
+    public void should_not_be_able_to_update_a_course_without_required_fields() throws Exception{
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .password("PASSOWRD_TEST")
+        .email("EMAIL@gmail.com")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        CursoEntity courseEntity = CursoEntity.builder()
+        .name("COURSE_NAME_TEST")
+        .category("CATEGORY_TEST")
+        .active(Active.INACTIVE)
+        .build();
+
+        this.cursoRepository.saveAndFlush(courseEntity);
+
+        PutCursoDTO putCourseDTO = PutCursoDTO.builder().name("NAME_TEST").build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.put("/company/course/put/{course_id}", courseEntity.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(putCourseDTO))
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
