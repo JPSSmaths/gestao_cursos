@@ -98,5 +98,28 @@ public class PutCursoControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    
+    @Test
+    @DisplayName("Should not be able to update a non existent course")
+    public void should_not_be_able_to_update_a_non_existent_course() throws Exception{
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .password("PASSOWRD_TEST")
+        .email("EMAIL@gmial.com")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        PutCursoDTO putCourseDTO = PutCursoDTO.builder()
+        .name("COURSE_NAME_UPDATED")
+        .category("CATEGORY_TEST")
+        .active(Active.ACTIVE)
+        .build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.put("/company/course/put/{course_id}", UUID.randomUUID())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(putCourseDTO))
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
