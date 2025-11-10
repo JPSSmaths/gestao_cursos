@@ -15,8 +15,12 @@ public class PutCursoUseCase {
     @Autowired
     private CursoRepository cursoRepository;
 
-    public CursoEntity execute(UUID curso_id, PutCursoDTO putCursoDTO) {
+    public CursoEntity execute(UUID curso_id, PutCursoDTO putCursoDTO, UUID company_id) { 
         return this.cursoRepository.findById(curso_id).map(curso -> {
+            if(!curso.getCompanyId().equals(company_id)){
+                throw new CursoNotFoundException();
+            }
+
             curso.setName(putCursoDTO.getName());
             curso.setCategory(putCursoDTO.getCategory());
             curso.setActive(putCursoDTO.getActive());

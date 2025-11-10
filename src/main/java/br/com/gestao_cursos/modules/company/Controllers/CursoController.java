@@ -105,9 +105,10 @@ public class CursoController {
     @SecurityRequirement(name = "jwt_auth")
     @PutMapping("/put/{curso_id}")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> put(@PathVariable UUID curso_id, @Valid @RequestBody PutCursoDTO putCursoDTO){
+    public ResponseEntity<Object> put(@PathVariable UUID curso_id, @Valid @RequestBody PutCursoDTO putCursoDTO, HttpServletRequest request){
         try {
-            var result = this.putCursoUseCase.execute(curso_id, putCursoDTO);
+            var company_id = UUID.fromString(request.getAttribute("company_id").toString());
+            var result = this.putCursoUseCase.execute(curso_id, putCursoDTO, company_id);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -139,11 +140,12 @@ public class CursoController {
         @ApiResponse(responseCode = "400", description = "Unable update atribut active of course")
     })
     @SecurityRequirement(name = "jwt_auth")
-    @PatchMapping("/patch/{curso_id}")
+    @PatchMapping("/patch/{course_id}")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> patch(@PathVariable UUID curso_id, @RequestBody PatchCursoDTO patchCursoDTO){
+    public ResponseEntity<Object> patch(@PathVariable UUID curso_id, @RequestBody PatchCursoDTO patchCursoDTO, HttpServletRequest request){
         try {
-            var result = this.patchCursoUseCase.execute(curso_id, patchCursoDTO);
+            var company_id = UUID.fromString(request.getAttribute("company_id").toString());
+            var result = this.patchCursoUseCase.execute(curso_id, patchCursoDTO, company_id);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
