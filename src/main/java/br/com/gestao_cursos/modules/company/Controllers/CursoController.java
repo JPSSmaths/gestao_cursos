@@ -142,10 +142,10 @@ public class CursoController {
     @SecurityRequirement(name = "jwt_auth")
     @PatchMapping("/patch/{course_id}")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> patch(@PathVariable UUID curso_id, @RequestBody PatchCursoDTO patchCursoDTO, HttpServletRequest request){
+    public ResponseEntity<Object> patch(@PathVariable UUID course_id, @RequestBody PatchCursoDTO patchCursoDTO, HttpServletRequest request){
         try {
             var company_id = UUID.fromString(request.getAttribute("company_id").toString());
-            var result = this.patchCursoUseCase.execute(curso_id, patchCursoDTO, company_id);
+            var result = this.patchCursoUseCase.execute(course_id, patchCursoDTO, company_id);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
