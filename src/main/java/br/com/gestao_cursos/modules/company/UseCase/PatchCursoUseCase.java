@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.gestao_cursos.exceptions.CursoNotFoundException;
-import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Active;
 import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
@@ -16,9 +15,6 @@ import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
 public class PatchCursoUseCase {
     @Autowired
     private CursoRepository cursoRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
 
     public CursoEntity execute(UUID cursoId, PatchCursoDTO patchCursoDTO, UUID company_id){
         return this.cursoRepository.findById(cursoId).map(curso -> {

@@ -36,19 +36,22 @@ public class PatchCursoUseCaseTest {
         when(this.cursoRepository.findById(company.getId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> {
-            this.patchCursoUseCase.execute(company.getId(), null);
+            this.patchCursoUseCase.execute(company.getId(), null, company.getId());
         }).isInstanceOf(CursoNotFoundException.class);
     }
 
     @Test
     @DisplayName("Should be able to update a existent course")
     public void should_be_able_update_a_existent_course() {
+        CompanyEntity company = CompanyEntity.builder().id(UUID.randomUUID()).build();
+
         PatchCursoDTO patchCursoDTO = PatchCursoDTO.builder()
                 .active("ACTIVE")
                 .build();
         
         CursoEntity course = CursoEntity.builder()
                 .active(Enum.valueOf(Active.class, patchCursoDTO.active()))
+                .companyId(company.getId())
                 .build();
         
         CursoEntity courseUpdated = course;
@@ -57,8 +60,30 @@ public class PatchCursoUseCaseTest {
         when(this.cursoRepository.findById(course.getId())).thenReturn(Optional.of(course));
         when(this.cursoRepository.save(course)).thenReturn(courseUpdated);
 
-        this.patchCursoUseCase.execute(course.getId(), patchCursoDTO);
+        this.patchCursoUseCase.execute(course.getId(), patchCursoDTO, company.getId());
 
         assertEquals(course, courseUpdated);
+    }
+
+    @Test
+    @DisplayName("Should not be able to update a course from another company")
+    public void should_not_be_able_update_a_course_from_another_company() {
+        CompanyEntity company = CompanyEntity.builder().id(UUID.randomUUID()).build();
+        CompanyEntity anotherCompany = CompanyEntity.builder().id(UUID.randomUUID()).build();
+
+        PatchCursoDTO patchCursoDTO = PatchCursoDTO.builder()
+                .active("ACTIVE")
+                .build();
+
+        CursoEntity course = CursoEntity.builder()
+                .active(Enum.valueOf(Active.class, patchCursoDTO.active()))
+                .companyId(company.getId())
+                .build();
+
+        when(this.cursoRepository.findById(course.getId())).thenReturn(Optional.of(course));
+
+        assertThatThrownBy(() -> {
+            this.patchCursoUseCase.execute(course.getId(), patchCursoDTO, anotherCompany.getId());
+        }).isInstanceOf(CursoNotFoundException.class);
     }
 }
