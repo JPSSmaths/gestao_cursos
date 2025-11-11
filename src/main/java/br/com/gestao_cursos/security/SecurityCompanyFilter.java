@@ -45,6 +45,9 @@ public class SecurityCompanyFilter extends OncePerRequestFilter{
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(token, null, grants);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
         }
         filterChain.doFilter(request, response);
