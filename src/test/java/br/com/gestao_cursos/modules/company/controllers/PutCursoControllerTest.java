@@ -71,22 +71,23 @@ public class PutCursoControllerTest {
         CompanyEntity companyEntity = CompanyEntity.builder()
         .username("USERNAME_TEST")
         .password("PASSOWRD_TEST")
-        .email("EMAIL@gmail.com")
+        .email("Teste@gmail.com")
         .build();
 
         this.companyRepository.saveAndFlush(companyEntity);
 
         CursoEntity courseEntity = CursoEntity.builder()
-        .name("COURSE_NAME_TEST")
+        .name("N_TEST")
         .category("CATEGORY_TEST")
         .active(Active.INACTIVE)
+        .company(companyEntity)
         .build();
 
         this.cursoRepository.saveAndFlush(courseEntity);
 
         PutCursoDTO putCourseDTO = PutCursoDTO.builder()
         .name("COURSE_NAME_UPDATED")
-        .category("CATEGORY_TEST")
+        .category("CAT_TEST")
         .active(Active.ACTIVE)
         .build();
 
