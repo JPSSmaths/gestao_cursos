@@ -103,12 +103,12 @@ public class CursoController {
         @ApiResponse(responseCode = "400", description = "Unable update course")
     })
     @SecurityRequirement(name = "jwt_auth")
-    @PutMapping("/put/{curso_id}")
+    @PutMapping("/put/{course_id}")
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Object> put(@PathVariable UUID curso_id, @Valid @RequestBody PutCursoDTO putCursoDTO, HttpServletRequest request){
+    public ResponseEntity<Object> put(@PathVariable UUID course_id, @Valid @RequestBody PutCursoDTO putCursoDTO, HttpServletRequest request){
         try {
             var company_id = UUID.fromString(request.getAttribute("company_id").toString());
-            var result = this.putCursoUseCase.execute(curso_id, putCursoDTO, company_id);
+            var result = this.putCursoUseCase.execute(course_id, putCursoDTO, company_id);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

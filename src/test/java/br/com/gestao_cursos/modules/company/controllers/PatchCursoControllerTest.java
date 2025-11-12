@@ -21,6 +21,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
+import br.com.gestao_cursos.modules.company.curso.Active;
+import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.curso.dto.PatchCursoDTO;
 import br.com.gestao_cursos.modules.company.utils.TestUtils;
@@ -64,8 +66,8 @@ public class PatchCursoControllerTest {
     }
 
     @Test
-    @DisplayName("Should not be able update non existent course")
-    public void should_not_be_able_update_non_existent_course() throws Exception{
+    @DisplayName("Should not be able update an non existent course")
+    public void should_not_be_able_update_non_an_existent_course() throws Exception{
         CompanyEntity company = CompanyEntity.builder()
                 .username("Company_Test")
                 .email("EMAIL@gmail.com")
@@ -86,5 +88,35 @@ public class PatchCursoControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    
+    @Test
+    @DisplayName("Should be able update course active atribut")
+    public void should_be_able_update_course_active_atribut() throws Exception{
+        CompanyEntity company = CompanyEntity.builder()
+                .username("Company_Test")
+                .email("EMAIL@gmail.com")
+                .password("123456")
+                .build();
+
+        this.companyRepository.saveAndFlush(company);
+
+        CursoEntity cursoEntity = CursoEntity.builder()
+                .name("Course_Test")
+                .category("Category_Test")
+                .active(Active.INACTIVE)
+                .company(company)
+                .build();
+
+        this.cursoRepository.saveAndFlush(cursoEntity);
+
+        PatchCursoDTO patchCursoDTO = PatchCursoDTO.builder()
+                .active("ACTIVE")
+                .build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.patch("/company/course/patch/{course_id}", cursoEntity.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(patchCursoDTO))
+            .header("Authorization", TestUtils.generateToken(company.getId()))
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
