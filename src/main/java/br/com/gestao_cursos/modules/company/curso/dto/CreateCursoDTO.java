@@ -4,6 +4,7 @@ import br.com.gestao_cursos.modules.company.curso.Active;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,6 @@ public class CreateCursoDTO {
     @NotBlank
     private String category;
     @Schema(example="ACTIVE", requiredMode=RequiredMode.REQUIRED)
-    @NotBlank
+    @NotNull
     private Active active; 
 }
