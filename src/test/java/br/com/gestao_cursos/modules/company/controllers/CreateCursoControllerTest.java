@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.curso.Active;
+import br.com.gestao_cursos.modules.company.curso.Entity.CursoEntity;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
 import br.com.gestao_cursos.modules.company.curso.dto.CreateCursoDTO;
 import br.com.gestao_cursos.modules.company.utils.TestUtils;
@@ -81,9 +83,43 @@ public class CreateCursoControllerTest {
         this.mockMvc.perform(
             MockMvcRequestBuilders.post("/company/course/create")
             .header("Authorization", "Bearer " + TestUtils.generateToken(companyEntity.getId()))
-            .contentType("application/json")
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtils.objectToJSON(createCursoDTO))
         ).andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Should not be able create a course with a existent name")
+    public void should_not_be_able_create_a_course_with_a_existent_name() throws Exception {
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .email("EMAIL@gmail.com")
+        .password("PASSWORD_TEST")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        CursoEntity cursoEntity = CursoEntity.builder()
+        .name("COURSE_TEST")
+        .category("CATEGORY_TEST")
+        .active(Active.ACTIVE)
+        .company(companyEntity)
+        .build();
+
+        this.cursoRepository.saveAndFlush(cursoEntity);
+
+        CreateCursoDTO createCursoDTO = CreateCursoDTO.builder()
+            .name("COURSE_TEST")
+            .category("JAVA_TEST")
+            .active(Active.ACTIVE)
+            .build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.post("/company/course/create")
+            .header("Authorization", "Bearer " + TestUtils.generateToken(companyEntity.getId()))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(createCursoDTO))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 
