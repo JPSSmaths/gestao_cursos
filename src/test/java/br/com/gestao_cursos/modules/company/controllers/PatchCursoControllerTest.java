@@ -66,8 +66,8 @@ public class PatchCursoControllerTest {
     }
 
     @Test
-    @DisplayName("Should not be able update an non existent course")
-    public void should_not_be_able_update_non_an_existent_course() throws Exception{
+    @DisplayName("Should not be able update a non existent course")
+    public void should_not_be_able_update_a_non_existent_course() throws Exception{
         CompanyEntity company = CompanyEntity.builder()
                 .username("Company_Test")
                 .email("EMAIL@gmail.com")
