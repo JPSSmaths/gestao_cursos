@@ -74,7 +74,7 @@ public class CreateCursoControllerTest {
 
         CompanyEntity companyEntity = CompanyEntity.builder()
         .username("USERNAME_TEST")
-        .email("EMAIL@gmail.com")
+        .email("E@gmail.com")
         .password("PASSWORD_TEST")
         .build();
 
@@ -82,7 +82,7 @@ public class CreateCursoControllerTest {
 
         this.mockMvc.perform(
             MockMvcRequestBuilders.post("/company/course/create")
-            .header("Authorization", "Bearer " + TestUtils.generateToken(companyEntity.getId()))
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtils.objectToJSON(createCursoDTO))
         ).andExpect(MockMvcResultMatchers.status().isCreated());
@@ -116,11 +116,32 @@ public class CreateCursoControllerTest {
 
         this.mockMvc.perform(
             MockMvcRequestBuilders.post("/company/course/create")
-            .header("Authorization", "Bearer " + TestUtils.generateToken(companyEntity.getId()))
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtils.objectToJSON(createCursoDTO))
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("Should not be able create a course without all required fields")
+    public void should_not_be_able_create_a_course_without_all_required_fields() throws Exception {
+        CreateCursoDTO createCursoDTO = CreateCursoDTO.builder()
+            .name("Course Test")
+            .build();
 
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .email("Alo@gmail.com")
+        .password("PASSWORD_TEST")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.post("/company/course/create")
+            .header("Authorization", TestUtils.generateToken(companyEntity.getId()))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(createCursoDTO))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
