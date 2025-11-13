@@ -16,8 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
+import br.com.gestao_cursos.modules.company.curso.Active;
 import br.com.gestao_cursos.modules.company.curso.Repository.CursoRepository;
+import br.com.gestao_cursos.modules.company.curso.dto.CreateCursoDTO;
+import br.com.gestao_cursos.modules.company.utils.TestUtils;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -57,5 +61,30 @@ public class CreateCursoControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
-    
+    @Test
+    @DisplayName("Should be able create a course")
+    public void shoud_be_able_create_a_course() throws Exception {
+        CreateCursoDTO createCursoDTO = CreateCursoDTO.builder()
+            .name("Course Test")
+            .category("JAVA_TEST")
+            .active(Active.ACTIVE)
+            .build();
+
+        CompanyEntity companyEntity = CompanyEntity.builder()
+        .username("USERNAME_TEST")
+        .email("EMAIL@gmail.com")
+        .password("PASSWORD_TEST")
+        .build();
+
+        this.companyRepository.saveAndFlush(companyEntity);
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.post("/company/course/create")
+            .header("Authorization", "Bearer " + TestUtils.generateToken(companyEntity.getId()))
+            .contentType("application/json")
+            .content(TestUtils.objectToJSON(createCursoDTO))
+        ).andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+
 }
