@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import br.com.gestao_cursos.modules.company.Entity.CompanyEntity;
 import br.com.gestao_cursos.modules.company.Repository.CompanyRepository;
 import br.com.gestao_cursos.modules.company.dto.AuthCompanyRequestDTO;
 import br.com.gestao_cursos.modules.company.utils.TestUtils;
@@ -54,5 +55,26 @@ public class AuthCompanyControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    
+    @Test
+    @DisplayName("Should not be able generate a token with invalid password")
+    public void should_not_be_able_generate_a_token_with_invalid_password() throws Exception{
+        CompanyEntity company = CompanyEntity.builder()
+            .username("validcompany")
+            .password("correctpassword")
+            .email("EMAIL@gmail.com")
+            .build();
+
+        this.companyRepository.save(company);
+
+        AuthCompanyRequestDTO  authCompanyRequestDTO = AuthCompanyRequestDTO.builder()
+            .username("validcompany")
+            .password("wrongpassword")
+            .build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.post("/company/auth/create")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(authCompanyRequestDTO))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
