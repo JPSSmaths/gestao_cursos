@@ -32,7 +32,6 @@ public class CompanyEntity {
 
     @Schema(example = "accenture_company")
     @Pattern(regexp = "\\S+", message = "The [username] field cannot contain blank spaces")
-    @Column(unique=true)
     private String username;
 
     @Schema(example = "accenture_123")

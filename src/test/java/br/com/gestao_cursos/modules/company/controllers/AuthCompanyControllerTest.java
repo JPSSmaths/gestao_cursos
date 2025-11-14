@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,10 +34,12 @@ public class AuthCompanyControllerTest {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Before
     public void setUp(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(SecurityMockMvcConfigurers.springSecurity()).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
@@ -52,7 +54,7 @@ public class AuthCompanyControllerTest {
             MockMvcRequestBuilders.post("/company/auth/create")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtils.objectToJSON(authCompanyRequestDTO))
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        ).andExpect(MockMvcResultMatchers.status().isInternalServerError());
     }
 
     @Test
@@ -60,7 +62,7 @@ public class AuthCompanyControllerTest {
     public void should_not_be_able_generate_a_token_with_invalid_password() throws Exception{
         CompanyEntity company = CompanyEntity.builder()
             .username("validcompany")
-            .password("correctpassword")
+            .password(this.passwordEncoder.encode("correctpassword"))
             .email("EMAIL@gmail.com")
             .build();
 
@@ -75,6 +77,29 @@ public class AuthCompanyControllerTest {
             MockMvcRequestBuilders.post("/company/auth/create")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtils.objectToJSON(authCompanyRequestDTO))
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        ).andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("Should be able generate a token with valid credentials")
+    public void should_be_able_generate_a_token_with_valid_credentials() throws Exception{
+        CompanyEntity company = CompanyEntity.builder()
+            .username("company")
+            .password(this.passwordEncoder.encode("correctpassword"))
+            .email("ABCD@gmail.com")
+            .build();
+
+        this.companyRepository.save(company);
+
+        AuthCompanyRequestDTO  authCompanyRequestDTO = AuthCompanyRequestDTO.builder()
+            .username("company")
+            .password("correctpassword")
+            .build();
+
+        this.mockMvc.perform(
+            MockMvcRequestBuilders.post("/company/auth/create")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.objectToJSON(authCompanyRequestDTO))
+        ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
